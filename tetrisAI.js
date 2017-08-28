@@ -1,3 +1,17 @@
+/*******************************************************
+An implementation of Genetic Algorithms to create 
+evolving/mutating AI to play Tetris.
+
+Author:- Raman Tehlan
+Date of creation:- 29/08/2017
+********************************************************/
+
+/******
+Elements of HTML to display data
+******/
+let gameOutput = document.getElementById("game")
+let scoreOutput = document.getElementById("score")
+
 // To store the current shape and it's position in grid
 let activeShape = {x:0, y:0, shape:undefined}
 // To store the score
@@ -7,7 +21,7 @@ let intervalTime = 500
 // To store the speed 
 let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 // To store the next shape
-let nextShape;
+let nextShape
 
 // Grid of tetris
 let grid = [
@@ -52,6 +66,10 @@ let colors = ["FF4759", "D38CFF", "518EBC", "FFEA82", "53D504", "68D624", "F7B06
 // To call the inception function on load
 document.onLoad = inception()
 
+/***************************************************
+Functions start here
+***************************************************/
+
 // To start the process/games
 function inception(){	
 	activeShape.shape = generateShape()
@@ -60,6 +78,11 @@ function inception(){
 	}
 	let interval = setInterval(loop, intervalTime)
 }
+
+
+/*******
+Play functions
+*******/
 
 // To take action on key pressed
 window.onkeydown = function(){
@@ -71,21 +94,15 @@ function pushShape(){
 
 }
 
-// To display the grid
-function displayGrid(){
-
-}
-
-// To display details about the game
-function displayDetails(){
-	
-}
-
 // To generate a random shape for the next chance
 function generateShape(){
 	return shapesMap[Math.floor(Math.random() * 7 )]
 }
 
+
+/*******
+ matrix functions
+*******/
 
 // To return the transpose of matrix
 function transposeMatrix(matrix , times){
@@ -108,15 +125,33 @@ function rotateMatrix(matrix , times){
 
 // This is to print a shape 
 function printMatrix(shape){
-	let output = document.getElementById("game_output")
 	let html = ""
 	for(let i = 0 ; i < shape.length ; i++)
 			html += "[" + shape[i] + "]<br>"
-	output.innerHTML += html + "<Br>"
+	displayArea.innerHTML += html + "<Br>"
 }
 
 
+/*******
+Display functions 
+*******/
 
+// To display the grid
+function displayGrid(){
+	let output = ""
+	for(let r = 0; r < grid.length; r++)
+		output += "[" + grid[r] + "] <Br>"
+}
+
+// To display next shape
+function displayNextShape(){
+	
+}
+
+// To display details about the game
+function displayDetails(){
+
+}
 
 
 
