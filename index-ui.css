@@ -98,32 +98,37 @@ Game Display
 .next{font-weight:normal;
     font-size:16px;
     line-height:18px;
-    margin:0px auto;
     font-weight:bold;
     text-align:center;
     max-width:60px;
     color:#01274C;
-    padding-top:15px;
+    padding-top:25px;
+    margin-left:405px;
+
 }
 
 .next_display{
-          margin:0px auto;
-          margin-top:5px;
+          margin-left:415px;
+          margin-top:10px;
           padding:15px;
           padding-top:10px;
           padding-bottom:10px;
           border-radius:5px;
           border:1px solid #01274C;
           font-size:20px;
-          max-width:60px;
-          min-height:60px;
+          width:70px;
+          height:60px;
+          color:#fff;
+          font-family: Inconsolata, Courier, monospace;
+          text-align:center;
 }
 
 .game_area{
   font-family: Inconsolata, Courier, monospace;
   font-size: 22px;
-  margin:0px auto;
-  margin-top:25px;
+  position:absolute;
+  top:25px;
+  left:560px;
   width:231px;
   height:465px;
   color:#01274C;
