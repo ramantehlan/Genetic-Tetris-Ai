@@ -1,65 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>TetNet</title>
+ 
+ <title>Tetris Genetic Ai</title>
+ 
  <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
- <style>
-   body {
-    background-color: #272821;
-  }
-  .text {
-    color: #706C5A;
-    font-family: Inconsolata, Courier, monospace;
-    font-size: 20px;
-  }
-  #output {
-    float: left;
-    padding-left: 20%;
-  }
-  #score {
-    padding-left: 55%;
-  }
-  #instructions {
-    float: left;
-    position: absolute;
-    left: 1.5%;
-    bottom: 3%;
-    font-size: small;
-    line-height: 110%;
-  }
-  #signature {
-    float: right;
-    position: absolute;
-    right: 1.5%;
-    bottom: 3%;
-    font-size: small;
-    line-height: 110%;
-  }
-  a:link {
-    color: inherit;
-  }
-</style>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+ <link rel="stylesheet" type="text/css" href="index-ui.css">
+ 
+ <!--<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script> -->
+
 </head>
 <body>
-  <div id="output" class="text"></div>
-  <div id="score" class="text"></div>
-  <div id="instructions" class="text"><br /><b>[Key Commands]</b><br />Load Fully Evolved Archive: [CTRL]<br />Speed Up: [E]<br />Slow Down: [D]<br />Toggle AI: [A]<br />Move Shape: [Arrow Keys]<br />Rotate Shape: [Up Arrow]<br />Drop Shape: [Down Arrow]<br />Save State: [Q]<br />Load State: [W]<br />Get Archive: [G]<br />Load Archive: [R]<br />Pick Shape: [I,O,T,S,Z,J,L]</div>
-  <div id="signature" class="text">Created By Idrees Hassan<br />Questions? Just ask!<br /><a href="mailto:&#105;&#100;&#114;&#101;&#101;&#115;&#064;&#105;&#100;&#114;&#101;&#101;&#115;&#105;&#110;&#099;&#046;&#099;&#111;&#109;" target="_top">&#105;&#100;&#114;&#101;&#101;&#115;&#064;&#105;&#100;&#114;&#101;&#101;&#115;&#105;&#110;&#099;&#046;&#099;&#111;&#109;</a></div>
-  <script src="./tetnet.js"></script>
-  <script>
-    $(window).keydown(function (e){
-      if (e.ctrlKey) {
-        var archiveJSON = $.ajax({
-          url: "./archive.json",
-          async: false
-        }).responseText;
-        loadArchive(archiveJSON);
-        alert("Archive loaded successfully!");
-      }
-    });
-  </script>
-  <script type="text/javascript">
-  </script>
+
+ <div class='panel'>
+
+
+     <h1>
+        Tetris Genetic AI
+     </h1>
+     <h2>
+          An implementation of Genetic Algorithms 
+          to create evolving/mutating AI to play Tetris.
+     </h2>
+
+     <div class='details'>
+          <div class='item score_item' >
+                    <div class="item_head">Score:</div>  
+                    <div class="item_value" id='score' style="font-size:16px;">-</div>
+          </div><br>
+
+          
+          
+          <div class="item">
+              <div class="item_head">Speed:</div>
+              <div class="item_value" id='speed'>-</div>
+          </div>
+          <div class="item">
+              <div class="item_head">Moves:</div>
+              <div class="item_value" id='moves'>-</div>
+          </div>
+         <!-- <div class="item">
+              <div class="item_head">Generation:</div>
+              <div class="item_value">-</div>
+          </div>
+          <div class="item">
+              <div class="item_head">Individual:</div>
+              <div class="item_value">-</div>
+          </div> -->
+
+     </div>
+
+
+     <div class="instructions" >
+        <b>Controls</b>
+
+        <div class='controls'>
+          Speed Up: [+]<br />
+          Slow Down: [-]<br />
+          Move Shape: [&#8646;]<br />
+          Rotate Shape: [&#8593;]<br />
+          Drop Shape: [&#8595;]<br />
+        </div>
+     </div>
+
+</div>
+
+<div class='next'>Next</div>
+<div class="next_display">
+</div>
+
+<div id='game' class='game_area'>
+
+</div>
+
+
+  <script src="tetrisAI.js"></script>
+
+
 </body>
 </html>
