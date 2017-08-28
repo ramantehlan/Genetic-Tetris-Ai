@@ -9,8 +9,11 @@ Date of creation:- 29/08/2017
 /******
 Elements of HTML to display data
 ******/
-let gameOutput = document.getElementById("game")
-let scoreOutput = document.getElementById("score")
+let gameDisplay = document.getElementById("game")
+let nextShapeDisplay = document.getElementById("nextShape")
+let scoreDisplay = document.getElementById("score")
+let speedDisplay = document.getElementById("speed")
+let movesDisplay = document.getElementById("moves")
 
 // To store the current shape and it's position in grid
 let activeShape = {x:0, y:0, shape:undefined}
@@ -73,8 +76,13 @@ Functions start here
 // To start the process/games
 function inception(){	
 	activeShape.shape = generateShape()
+
+	nextShape = generateShape()
+	displayNextShape()
+
 	let loop = function(){
 		pushShape()
+		updateScore()
 	}
 	let interval = setInterval(loop, intervalTime)
 }
@@ -91,7 +99,7 @@ window.onkeydown = function(){
 
 // To push the shape in the grid
 function pushShape(){
-
+	displayGrid()
 }
 
 // To generate a random shape for the next chance
@@ -123,14 +131,6 @@ function rotateMatrix(matrix , times){
 	return matrix
 }
 
-// This is to print a shape 
-function printMatrix(shape){
-	let html = ""
-	for(let i = 0 ; i < shape.length ; i++)
-			html += "[" + shape[i] + "]<br>"
-	displayArea.innerHTML += html + "<Br>"
-}
-
 
 /*******
 Display functions 
@@ -141,16 +141,28 @@ function displayGrid(){
 	let output = ""
 	for(let r = 0; r < grid.length; r++)
 		output += "[" + grid[r] + "] <Br>"
+	gameDisplay.innerHTML = output
 }
 
 // To display next shape
 function displayNextShape(){
-	
+	let output = ""
+	for(let r = 0; r < nextShape.length; r++)
+		output +=  replaceAll(replaceAll(nextShape[r].toString() , "," , "&nbsp;") , "0" , "&nbsp;" ) + "<Br>"
+	nextShapeDisplay.innerHTML = output
 }
 
 // To display details about the game
 function displayDetails(){
 
+}
+
+/******
+Other functions
+******/
+
+function replaceAll(heap, search, replacement){
+	return heap.replace(new RegExp(search, 'g'), replacement)
 }
 
 
