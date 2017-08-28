@@ -119,18 +119,14 @@ Game Display
           min-height:60px;
 }
 
-#game_output{
+.game_area{
   font-family: Inconsolata, Courier, monospace;
   font-size: 22px;
   margin:0px auto;
-  margin-left:45%;
   margin-top:25px;
   width:231px;
-  width:400px;
   height:465px;
   color:#01274C;
-
-  color:#fff;
   border-radius:0px;
   background-color:#011B35;
 }
