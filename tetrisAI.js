@@ -27,28 +27,7 @@ let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 let nextShape
 
 // Grid of tetris
-let grid = [
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-]
+let grid = createMatrix(10,20)
 
 // Shapes used in tetris
 let shapes = {
@@ -81,8 +60,9 @@ function inception(){
 	displayNextShape()
 
 	let loop = function(){
+		score++
 		pushShape()
-		updateScore()
+		displayDetails()
 	}
 	let interval = setInterval(loop, intervalTime)
 }
@@ -111,6 +91,19 @@ function generateShape(){
 /*******
  matrix functions
 *******/
+
+// To create a new empty matrix
+function createMatrix(lenght , height){
+	// To store the new matrix
+	let matrix = new Array()
+	// To store the single row of a matrix
+	let row = new Array()
+	for(let l = 0; l < length; l++)
+		row.push(0)
+	for(let h = 0; h < height; h++)
+		matrix.push(row)
+	return matrix
+}
 
 // To return the transpose of matrix
 function transposeMatrix(matrix , times){
@@ -161,6 +154,7 @@ function displayDetails(){
 Other functions
 ******/
 
+// To replace a word/character with another in a string 
 function replaceAll(heap, search, replacement){
 	return heap.replace(new RegExp(search, 'g'), replacement)
 }
