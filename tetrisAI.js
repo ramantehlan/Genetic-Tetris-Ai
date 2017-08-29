@@ -58,13 +58,13 @@ Functions start here
 // To start the process/games
 function inception(){	
 	activeShape.shape = generateShape()
-
+	++moves
+	
 	nextShape = generateShape()
 	displayNextShape()
 
 	let loop = function(){
 		score++
-		moves++
 		pushShape()
 		displayDetails()
 	}
