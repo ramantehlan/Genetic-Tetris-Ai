@@ -127,12 +127,13 @@ Game Display
   font-family: Inconsolata, Courier, monospace;
   font-size: 22px;
   position:absolute;
-  top:25px;
+  top:30px;
   left:560px;
-  width:231px;
-  height:465px;
   color:#01274C;
   border-radius:0px;
   background-color:#011B35;
+  border-radius:3px;
+  padding:3px;
+  padding-bottom:5px;
 }
 
