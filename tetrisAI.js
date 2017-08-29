@@ -6,28 +6,18 @@ Author:- Raman Tehlan
 Date of creation:- 29/08/2017
 ********************************************************/
 
-/******
-Elements of HTML to display data
-******/
-let gameDisplay = document.getElementById("game")
+
 let nextShapeDisplay = document.getElementById("nextShape")
 let scoreDisplay = document.getElementById("score")
 let speedDisplay = document.getElementById("speed")
 let movesDisplay = document.getElementById("moves")
-
-// To store the current shape and it's position in grid
-let activeShape = {x:0, y:0, shape:undefined}
-// To store the score
-let score = 0
-// To store the milliseconds for interval 
-let intervalTime = 500
-// To store the speed 
-let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
-// To store the next shape
-let nextShape
+let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
-let grid = createMatrix(10,20)
+let gridLength = 12
+let gridHeight = 24
+let grid = createMatrix(gridLength,gridHeight)
+
 
 // Shapes used in tetris
 let shapes = {
@@ -45,6 +35,19 @@ let shapesMap = [shapes.I, shapes.J, shapes.L, shapes.O, shapes.S, shapes.T, sha
 // Colors for shapes, arranged according to there shape number
 let colors = ["FF4759", "D38CFF", "518EBC", "FFEA82", "53D504", "68D624", "F7B060"]
 
+// To store the current shape and it's position in grid
+let activeShape = {x:0, y:0, shape:undefined}
+// To store the score
+let score = 0
+// To store the milliseconds for interval 
+let intervalTime = 500
+// To store the speed 
+let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
+// To store the next shape
+let nextShape
+// To store the number of shapes/moves used
+let moves = 0
+
 // To call the inception function on load
 document.onLoad = inception()
 
@@ -61,6 +64,7 @@ function inception(){
 
 	let loop = function(){
 		score++
+		moves++
 		pushShape()
 		displayDetails()
 	}
@@ -93,7 +97,7 @@ function generateShape(){
 *******/
 
 // To create a new empty matrix
-function createMatrix(lenght , height){
+function createMatrix(length , height){
 	// To store the new matrix
 	let matrix = new Array()
 	// To store the single row of a matrix
@@ -133,7 +137,7 @@ Display functions
 function displayGrid(){
 	let output = ""
 	for(let r = 0; r < grid.length; r++)
-		output += "[" + grid[r] + "] <Br>"
+		output += "|" + replaceAll(grid[r].toString(), "," , "&nbsp;") + "|<Br>"
 	gameDisplay.innerHTML = output
 }
 
@@ -147,7 +151,8 @@ function displayNextShape(){
 
 // To display details about the game
 function displayDetails(){
-
+	scoreDisplay.innerHTML = score
+	movesDisplay.innerHTML = moves
 }
 
 /******
