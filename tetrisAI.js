@@ -19,13 +19,13 @@ let grid = createMatrix(12,22)
 
 // Shapes used in tetris
 let shapes = {
-	I: [[0,0,0,0], [1,1,1,1], [0,0,0,0], [0,0,0,0]],
-	J: [[2,0,0], [2,2,2], [0,0,0]],
-	L: [[0,0,3], [3,3,3], [0,0,0]],
+	I: [[1,1,1,1], [0,0,0,0], [0,0,0,0], [0,0,0,0]],
+	Z: [[2,2,0], [0,2,2], [0,0,0]],
+	T: [[0,3,0], [3,3,3], [0,0,0]],
 	O: [[4,4], [4,4]],
 	S: [[0,5,5], [5,5,0], [0,0,0]],
-	T: [[0,6,0], [6,6,6], [0,0,0]],
-	Z: [[7,7,0], [0,7,7], [0,0,0]]
+	L: [[0,0,6], [6,6,6], [0,0,0]],
+	J: [[7,0,0], [7,7,7], [0,0,0]]
 }
 
 // This is to access the shape using number
@@ -60,6 +60,7 @@ Functions start here
 
 // To start the process/games
 function inception(){	
+	displayGrid()
 	// Generate new shape and assign it's x and y  
 	activeShape.shape = generateShape();
  	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2)
