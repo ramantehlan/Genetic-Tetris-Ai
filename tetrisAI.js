@@ -14,9 +14,8 @@ let movesDisplay = document.getElementById("moves")
 let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
-let gridLength = 12
-let gridHeight = 24
-let grid = createMatrix(gridLength,gridHeight)
+// (length,height)
+let grid = createMatrix(10,20)
 
 
 // Shapes used in tetris
@@ -39,14 +38,19 @@ let colors = ["FF4759", "D38CFF", "518EBC", "FFEA82", "53D504", "68D624", "F7B06
 let activeShape = {x:0, y:0, shape:undefined}
 // To store the score
 let score = 0
+// To store all the possible intervals
+let intervals = [500, 150, 1, 0]
 // To store the milliseconds for interval 
-let intervalTime = 500
+let interval = intervals[0]
 // To store the speed 
 let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 // To store the next shape
 let nextShape
 // To store the number of shapes/moves used
 let moves = 0
+let bagIndex = 0
+let rndSeed = 1
+let bag = []
 
 // To call the inception function on load
 document.onLoad = inception()
@@ -57,18 +61,20 @@ Functions start here
 
 // To start the process/games
 function inception(){	
-	activeShape.shape = generateShape()
-	++moves
-	
+	// Generate new shape and push it to grid
+	nextShapeStart()
+	pushShape()
+	// Generate next shape and display it
 	nextShape = generateShape()
 	displayNextShape()
-
+	// Increase moves
+	moves++
 	let loop = function(){
 		score++
-		pushShape()
+		displayGrid()
 		displayDetails()
 	}
-	let interval = setInterval(loop, intervalTime)
+	let repeat = setInterval(loop, interval)
 }
 
 
@@ -83,14 +89,69 @@ window.onkeydown = function(){
 
 // To push the shape in the grid
 function pushShape(){
-	displayGrid()
+	for (let r = 0; r < activeShape.shape.length; r++) 
+ 		for (let c = 0; c < activeShape.shape[r].length; c++) 
+ 			if (activeShape.shape[r][c] !== 0){
+ 				grid[activeShape.y + r][activeShape.x + c] = activeShape.shape[r][c]
+ 				console.log(grid[activeShape.y + r][activeShape.x + c] + " , (" + (activeShape.y + r) + "," + (activeShape.x + c)  + ") (" + r + "," + c + ")")
+ 			}
 }
+
+ function nextShapeStart() {
+ 	bagIndex += 1;
+ 	if (bag.length === 0 || bagIndex == bag.length) {
+ 		generateBag();
+ 	}
+ 	if (bagIndex == bag.length - 1) {
+ 		let prevSeed = rndSeed;
+ 		upcomingShape = randomProperty(shapes);
+ 		rndSeed = prevSeed;
+ 	} else {
+ 		upcomingShape = shapes[bag[bagIndex + 1]];
+ 	}
+ 	activeShape.shape = shapes[bag[bagIndex]];
+ 	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2);
+ 	activeShape.y = 0;
+ }
+
+  function randomProperty(obj) {
+ 	return(obj[randomKey(obj)]);
+ }
 
 // To generate a random shape for the next chance
 function generateShape(){
 	return shapesMap[Math.floor(Math.random() * 7 )]
 }
 
+ function generateBag() {
+ 	bag = [];
+ 	var contents = "";
+ 	for (var i = 0; i < 7; i++) {
+ 		var shape = randomKey(shapes);
+ 		while(contents.indexOf(shape) != -1) {
+ 			shape = randomKey(shapes);
+ 		}
+ 		bag[i] = shape;
+ 		contents += shape;
+ 	}
+ 	bagIndex = 0;
+ }
+
+  function randomKey(obj) {
+ 	var keys = Object.keys(obj);
+ 	var i = seededRandom(0, keys.length);
+ 	return keys[i];
+ }
+
+ function seededRandom(min, max) {
+ 	max = max || 1;
+ 	min = min || 0;
+
+ 	rndSeed = (rndSeed * 9301 + 49297) % 233280;
+ 	var rnd = rndSeed / 233280;
+
+ 	return Math.floor(min + rnd * (max - min));
+ }
 
 /*******
  matrix functions
@@ -138,6 +199,9 @@ function displayGrid(){
 	let output = ""
 	for(let r = 0; r < grid.length; r++)
 		output += "|" + replaceAll(grid[r].toString(), "," , "&nbsp;") + "|<Br>"
+	for (let c = 0; c < colors.length; c++)
+ 			output = replaceAll(output, "&nbsp;" +(c + 1), "&nbsp;<font color=\"" + colors[c] + "\">" + (c + 1) + "</font>")
+ 		
 	gameDisplay.innerHTML = output
 }
 
@@ -153,6 +217,7 @@ function displayNextShape(){
 function displayDetails(){
 	scoreDisplay.innerHTML = score
 	movesDisplay.innerHTML = moves
+	speedDisplay.innerHTML = getSpeed(interval)
 }
 
 /******
@@ -164,5 +229,9 @@ function replaceAll(heap, search, replacement){
 	return heap.replace(new RegExp(search, 'g'), replacement)
 }
 
+// To get the speed in words using interval
+function getSpeed(currentInterval){
+	return speeds[intervals.indexOf(currentInterval)]
+}
 
 
