@@ -5,7 +5,7 @@ evolving/mutating AI to play Tetris.
 Author:- Raman Tehlan
 Date of creation:- 29/08/2017
 ********************************************************/
-
+//console.log()
 
 let nextShapeDisplay = document.getElementById("nextShape")
 let scoreDisplay = document.getElementById("score")
@@ -15,8 +15,7 @@ let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
 // (length,height)
-let grid = createMatrix(10,20)
-
+let grid = createMatrix(12,22)
 
 // Shapes used in tetris
 let shapes = {
@@ -61,9 +60,11 @@ Functions start here
 
 // To start the process/games
 function inception(){	
-	// Generate new shape and push it to grid
-	nextShapeStart()
-	pushShape()
+	// Generate new shape and assign it's x and y  
+	activeShape.shape = generateShape();
+ 	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2)
+ 	activeShape.y = 0
+ 	// push new shape to grid
 	// Generate next shape and display it
 	nextShape = generateShape()
 	displayNextShape()
@@ -71,6 +72,7 @@ function inception(){
 	moves++
 	let loop = function(){
 		score++
+		pushShape()
 		displayGrid()
 		displayDetails()
 	}
@@ -87,71 +89,20 @@ window.onkeydown = function(){
 	let key = String.fromCharCode(event.keyCode)
 }
 
+
 // To push the shape in the grid
 function pushShape(){
 	for (let r = 0; r < activeShape.shape.length; r++) 
  		for (let c = 0; c < activeShape.shape[r].length; c++) 
- 			if (activeShape.shape[r][c] !== 0){
+ 			if (activeShape.shape[r][c] !== 0)
  				grid[activeShape.y + r][activeShape.x + c] = activeShape.shape[r][c]
- 				console.log(grid[activeShape.y + r][activeShape.x + c] + " , (" + (activeShape.y + r) + "," + (activeShape.x + c)  + ") (" + r + "," + c + ")")
- 			}
 }
-
- function nextShapeStart() {
- 	bagIndex += 1;
- 	if (bag.length === 0 || bagIndex == bag.length) {
- 		generateBag();
- 	}
- 	if (bagIndex == bag.length - 1) {
- 		let prevSeed = rndSeed;
- 		upcomingShape = randomProperty(shapes);
- 		rndSeed = prevSeed;
- 	} else {
- 		upcomingShape = shapes[bag[bagIndex + 1]];
- 	}
- 	activeShape.shape = shapes[bag[bagIndex]];
- 	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2);
- 	activeShape.y = 0;
- }
-
-  function randomProperty(obj) {
- 	return(obj[randomKey(obj)]);
- }
 
 // To generate a random shape for the next chance
 function generateShape(){
 	return shapesMap[Math.floor(Math.random() * 7 )]
 }
 
- function generateBag() {
- 	bag = [];
- 	var contents = "";
- 	for (var i = 0; i < 7; i++) {
- 		var shape = randomKey(shapes);
- 		while(contents.indexOf(shape) != -1) {
- 			shape = randomKey(shapes);
- 		}
- 		bag[i] = shape;
- 		contents += shape;
- 	}
- 	bagIndex = 0;
- }
-
-  function randomKey(obj) {
- 	var keys = Object.keys(obj);
- 	var i = seededRandom(0, keys.length);
- 	return keys[i];
- }
-
- function seededRandom(min, max) {
- 	max = max || 1;
- 	min = min || 0;
-
- 	rndSeed = (rndSeed * 9301 + 49297) % 233280;
- 	var rnd = rndSeed / 233280;
-
- 	return Math.floor(min + rnd * (max - min));
- }
 
 /*******
  matrix functions
@@ -161,13 +112,16 @@ function generateShape(){
 function createMatrix(length , height){
 	// To store the new matrix
 	let matrix = new Array()
-	// To store the single row of a matrix
+	for(let h = 0; h < height; h++)
+		matrix.push(createRow(length))
+	return matrix
+}
+
+function createRow(length){
 	let row = new Array()
 	for(let l = 0; l < length; l++)
 		row.push(0)
-	for(let h = 0; h < height; h++)
-		matrix.push(row)
-	return matrix
+	return row
 }
 
 // To return the transpose of matrix
@@ -189,7 +143,6 @@ function rotateMatrix(matrix , times){
 	return matrix
 }
 
-
 /*******
 Display functions 
 *******/
@@ -201,7 +154,6 @@ function displayGrid(){
 		output += "|" + replaceAll(grid[r].toString(), "," , "&nbsp;") + "|<Br>"
 	for (let c = 0; c < colors.length; c++)
  			output = replaceAll(output, "&nbsp;" +(c + 1), "&nbsp;<font color=\"" + colors[c] + "\">" + (c + 1) + "</font>")
- 		
 	gameDisplay.innerHTML = output
 }
 
