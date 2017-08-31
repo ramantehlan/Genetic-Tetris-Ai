@@ -15,7 +15,7 @@ let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
 // (length,height)
-let grid = createMatrix(12,22)
+let grid = createMatrix(8,18)
 
 // Shapes used in tetris
 let shapes = {
@@ -47,9 +47,6 @@ let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 let nextShape
 // To store the number of shapes/moves used
 let moves = 0
-let bagIndex = 0
-let rndSeed = 1
-let bag = []
 
 // To call the inception function on load
 document.onLoad = inception()
@@ -60,22 +57,18 @@ Functions start here
 
 // To start the process/games
 function inception(){	
-	displayGrid()
-	// Generate new shape and assign it's x and y  
-	activeShape.shape = generateShape();
- 	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2)
- 	activeShape.y = 0
- 	// push new shape to grid
-	// Generate next shape and display it
-	nextShape = generateShape()
-	displayNextShape()
-	// Increase moves
-	moves++
+	// To generate new active and next shape
+	rollShape()
+	// To push new shape in grid
+	pushShape(grid)
+	// To display
+	displayGrid(grid)
+	displayDetails()
+
+	// This is to repeat after interval
 	let loop = function(){
-		score++
-		pushShape()
-		displayGrid()
-		displayDetails()
+		// To start the play
+		play(grid)
 	}
 	let repeat = setInterval(loop, interval)
 }
@@ -90,13 +83,62 @@ window.onkeydown = function(){
 	let key = String.fromCharCode(event.keyCode)
 }
 
+// To initiate various import function to play the game
+function play(){
+		// To move the shape one step down
+		goDown()
+		// To increase score and moves 
+		score++
+
+		// To Display
+		displayGrid()
+		displayDetails()
+}
+
+// To move the shape down 
+function goDown(){
+	// To remove the active shape from current location
+	popShape()
+	// To increase the y axis of active shape by one
+	activeShape.y++
+	
+	if(collides(grid , activeShape)){
+		// To assign new shapes
+		rollShape()
+		console.log("hit")
+	}
+	
+	// To push shape again in the grid with updated coordinates 
+	pushShape()
+}
+
+function collides(scene, object) {
+ 	for (var row = 0; row < object.shape.length; row++) {
+ 		for (var col = 0; col < object.shape[row].length; col++) {
+ 			if (object.shape[row][col] !== 0) {
+ 				if (scene[object.y + row] === undefined || scene[object.y + row][object.x + col] === undefined || scene[object.y + row][object.x + col] !== 0) {
+ 					return true;
+ 				}
+ 			}
+ 		}
+ 	}
+ 	return false;
+ }
 
 // To push the shape in the grid
 function pushShape(){
 	for (let r = 0; r < activeShape.shape.length; r++) 
  		for (let c = 0; c < activeShape.shape[r].length; c++) 
- 			if (activeShape.shape[r][c] !== 0)
+ 			if (activeShape.shape[r][c] != 0)
  				grid[activeShape.y + r][activeShape.x + c] = activeShape.shape[r][c]
+}
+
+// To pop out the shape from the grid
+function popShape(){
+	for(let r = 0; r < activeShape.shape.length; r++)
+		for(let c = 0; c < activeShape.shape[r].length; c++)
+			if(activeShape.shape[r][c] != 0)
+				grid[activeShape.y + r][activeShape.x + c] = 0;
 }
 
 // To generate a random shape for the next chance
@@ -104,6 +146,24 @@ function generateShape(){
 	return shapesMap[Math.floor(Math.random() * 7 )]
 }
 
+// To assign new shape to activeShape and to nextShape
+function rollShape(){
+	// Generate new shape and assign it's x and y  
+	if(activeShape.shape === undefined)
+		activeShape.shape = generateShape();	
+	else
+		activeShape.shape = nextShape
+	
+ 	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2)
+ 	activeShape.y = 0
+ 	// push new shape to grid
+	// Generate next shape and display it
+	nextShape = generateShape()
+	displayNextShape()
+
+	// To increase the move
+	moves++
+}
 
 /*******
  matrix functions
