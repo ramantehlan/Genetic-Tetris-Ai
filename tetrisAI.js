@@ -15,7 +15,7 @@ let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
 // (length,height)
-let grid = createMatrix(8,18)
+let grid = createMatrix(12,24)
 
 // Shapes used in tetris
 let shapes = {
@@ -81,47 +81,76 @@ Play functions
 // To take action on key pressed
 window.onkeydown = function(){
 	let key = String.fromCharCode(event.keyCode)
+
+	// To move shape
+	if (event.keyCode == 38)
+		rotateShape()
+	if (event.keyCode == 39)
+		goRight()
+	if (event.keyCode == 37)
+		goLeft()
+	if (event.keyCode == 40)
+		goDown()
+
+	displayGrid()
 }
 
 // To initiate various import function to play the game
 function play(){
-		// To move the shape one step down
 		goDown()
-		// To increase score and moves 
 		score++
 
-		// To Display
 		displayGrid()
 		displayDetails()
 }
 
 // To move the shape down 
 function goDown(){
-	// To remove the active shape from current location
 	popShape()
-	// To increase the y axis of active shape by one
 	activeShape.y++
-	
 	if(collides(grid , activeShape)){
-		// To assign new shapes
+		activeShape.y--
+		pushShape()
 		rollShape()
-		console.log("hit")
 	}
 	
-	// To push shape again in the grid with updated coordinates 
 	pushShape()
 }
 
+// To move the shape to right
+function goRight(){
+	popShape()
+	activeShape.x++
+	if(collides())
+		activeShape.x--
+	pushShape()
+}
+
+// To move the shape to right
+function goLeft(){
+	popShape()
+	activeShape.x--
+	if (collides())
+		activeShape.x++
+	pushShape()
+}
+
+// To rotate the shape
+function rotateShape(){
+	popShape()
+	activeShape.shape = rotateMatrix(activeShape.shape,1)
+	if(collides())
+		activeShape.shape = rotateMatrix(activeShape.shape,3)
+	pushShape()
+}
+
+
 function collides(scene, object) {
- 	for (var row = 0; row < object.shape.length; row++) {
- 		for (var col = 0; col < object.shape[row].length; col++) {
- 			if (object.shape[row][col] !== 0) {
- 				if (scene[object.y + row] === undefined || scene[object.y + row][object.x + col] === undefined || scene[object.y + row][object.x + col] !== 0) {
+ 	for (var r = 0; r < activeShape.shape.length; r++)
+ 		for (var c = 0; c < activeShape.shape[r].length; c++)
+ 			if (activeShape.shape[r][c] !== 0)
+ 				if (grid[activeShape.y + r] === undefined || grid[activeShape.y + r][activeShape.x + c] === undefined || grid[activeShape.y + r][activeShape.x + c] !== 0)
  					return true;
- 				}
- 			}
- 		}
- 	}
  	return false;
  }
 
@@ -153,7 +182,6 @@ function rollShape(){
 		activeShape.shape = generateShape();	
 	else
 		activeShape.shape = nextShape
-	
  	activeShape.x = Math.floor(grid[0].length / 2) - Math.ceil(activeShape.shape[0].length / 2)
  	activeShape.y = 0
  	// push new shape to grid
@@ -213,8 +241,10 @@ function displayGrid(){
 	let output = ""
 	for(let r = 0; r < grid.length; r++)
 		output += "|" + replaceAll(grid[r].toString(), "," , "&nbsp;") + "|<Br>"
-	for (let c = 0; c < colors.length; c++)
+	for (let c = 0; c < colors.length; c++){
  			output = replaceAll(output, "&nbsp;" +(c + 1), "&nbsp;<font color=\"" + colors[c] + "\">" + (c + 1) + "</font>")
+ 			output = replaceAll(output, (c + 1) + "&nbsp;", "<font color=\"" + colors[c] + "\">" + (c + 1) + "</font>&nbsp;")
+	}
 	gameDisplay.innerHTML = output
 }
 
