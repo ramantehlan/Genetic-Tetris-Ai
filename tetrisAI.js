@@ -10,7 +10,7 @@ Date of creation:- 29/08/2017
 let nextShapeDisplay = document.getElementById("nextShape")
 let scoreDisplay = document.getElementById("score")
 let speedDisplay = document.getElementById("speed")
-let movesDisplay = document.getElementById("moves")
+let blocksDisplay = document.getElementById("blocks")
 let gameDisplay = document.getElementById("game")
 
 // Grid of tetris
@@ -45,8 +45,8 @@ let interval = intervals[0]
 let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 // To store the next shape
 let nextShape
-// To store the number of shapes/moves used
-let moves = 0
+// To store the number of shapes used
+let blocks = 0
 
 // To call the inception function on load
 document.onLoad = inception()
@@ -68,7 +68,7 @@ function inception(){
 	// This is to repeat after interval
 	let loop = function(){
 		// To start the play
-		play(grid)
+		play()
 	}
 	let repeat = setInterval(loop, interval)
 }
@@ -108,13 +108,27 @@ function play(){
 function goDown(){
 	popShape()
 	activeShape.y++
-	if(collides(grid , activeShape)){
+	if(collides()){
 		activeShape.y--
 		pushShape()
 		rollShape()
+		if(collides()){
+			reLoad()
+		}
 	}
 	
+	
 	pushShape()
+}
+
+// To reload the game
+function reLoad(){
+	score = 0
+	blocks = 0
+	grid = createMatrix(12,24)
+		// To generate new active and next shape
+	rollShape()
+
 }
 
 // To move the shape to right
@@ -145,7 +159,7 @@ function rotateShape(){
 }
 
 
-function collides(scene, object) {
+function collides() {
  	for (var r = 0; r < activeShape.shape.length; r++)
  		for (var c = 0; c < activeShape.shape[r].length; c++)
  			if (activeShape.shape[r][c] !== 0)
@@ -153,6 +167,7 @@ function collides(scene, object) {
  					return true;
  	return false;
  }
+
 
 // To push the shape in the grid
 function pushShape(){
@@ -189,8 +204,8 @@ function rollShape(){
 	nextShape = generateShape()
 	displayNextShape()
 
-	// To increase the move
-	moves++
+	// To increase the blocks
+	blocks++
 }
 
 /*******
@@ -205,6 +220,7 @@ function createMatrix(length , height){
 		matrix.push(createRow(length))
 	return matrix
 }
+
 
 function createRow(length){
 	let row = new Array()
@@ -259,7 +275,7 @@ function displayNextShape(){
 // To display details about the game
 function displayDetails(){
 	scoreDisplay.innerHTML = score
-	movesDisplay.innerHTML = moves
+	blocksDisplay.innerHTML = blocks
 	speedDisplay.innerHTML = getSpeed(interval)
 }
 
