@@ -38,7 +38,7 @@ let activeShape = {x:0, y:0, shape:undefined}
 // To store the score
 let score = 0
 // To store all the possible intervals
-let intervals = [500, 150, 20, 0]
+let intervals = [500, 150, 20, -2000]
 // To increate the interval index
 let intervalIndex = 0
 // To store the milliseconds for interval 
@@ -55,7 +55,11 @@ let blocks = 0
 Flags
 */
 // To indicate if interval is updated or not
-changeInterval = false
+let changeInterval = false
+// To indicate if game is paused or not
+let paused = false
+
+
 
 // To call the inception function on load
 document.onLoad = inception()
@@ -76,6 +80,7 @@ function inception(){
 
 	// This is to repeat after interval
 	let loop = function(){
+	 if(!paused){
 		// To check if there is a change in interval
 		if(changeInterval){
 			clearInterval(repeat)
@@ -84,6 +89,7 @@ function inception(){
 		}
 		// To start the play
 		play()
+	 }
 	}
 	let repeat = setInterval(loop, interval)
 }
@@ -107,12 +113,17 @@ window.onkeydown = function(){
 	if (event.keyCode == 40)
 		goDown()
 
-	// To increase the speed
+	// To increase or decease  the speed
 	if (event.keyCode == 187 || event.keyCode == 107)
 		updateInterval("inc")
-	// to decrese the speed
 	if (event.keyCode == 109 || event.keyCode == 189)
 		updateInterval("dec")
+
+	// To pause or start the game
+	if (key.toUpperCase() == "P")
+		paused = true
+	if (key.toUpperCase() == "S")
+		paused = false
 
 	displayGrid()
 }
