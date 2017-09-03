@@ -38,15 +38,24 @@ let activeShape = {x:0, y:0, shape:undefined}
 // To store the score
 let score = 0
 // To store all the possible intervals
-let intervals = [500, 150, 1, 0]
+let intervals = [500, 150, 20, 0]
+// To increate the interval index
+let intervalIndex = 0
 // To store the milliseconds for interval 
-let interval = intervals[0]
+let interval = intervals[intervalIndex]
 // To store the speed 
 let speeds = ["Slow", "Medium", "Fast", "Super Fast"]
 // To store the next shape
 let nextShape
 // To store the number of shapes used
 let blocks = 0
+
+
+/*
+Flags
+*/
+// To indicate if interval is updated or not
+changeInterval = false
 
 // To call the inception function on load
 document.onLoad = inception()
@@ -67,6 +76,12 @@ function inception(){
 
 	// This is to repeat after interval
 	let loop = function(){
+		// To check if there is a change in interval
+		if(changeInterval){
+			clearInterval(repeat)
+			repeat = setInterval(loop, interval)
+			changeInterval = false
+		}
 		// To start the play
 		play()
 	}
@@ -92,6 +107,13 @@ window.onkeydown = function(){
 	if (event.keyCode == 40)
 		goDown()
 
+	// To increase the speed
+	if (event.keyCode == 187 || event.keyCode == 107)
+		updateInterval("inc")
+	// to decrese the speed
+	if (event.keyCode == 109 || event.keyCode == 189)
+		updateInterval("dec")
+
 	displayGrid()
 }
 
@@ -102,6 +124,25 @@ function play(){
 
 		displayGrid()
 		displayDetails()
+}
+
+// To increase the speed of game
+function updateInterval(type){
+
+	if( type ==  "inc"){
+		intervalIndex++
+		if(intervalIndex >= intervals.length)
+			intervalIndex = 0
+	}
+	else if(type == "dec"){
+		intervalIndex--
+		if(intervalIndex < 0)
+			intervalIndex = 0
+
+	}
+
+	interval = intervals[intervalIndex]
+	changeInterval = true
 }
 
 // To move the shape down 
