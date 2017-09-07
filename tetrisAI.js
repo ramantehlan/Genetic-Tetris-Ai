@@ -164,23 +164,17 @@ function goDown(){
 		activeShape.y--
 		pushShape()
 		rollShape()
-		if(collides()){
-			reLoad()
-		}
+		checkRows()
+		if(collides())
+			reload()
 	}
-	
-	
 	pushShape()
 }
 
-// To reload the game
-function reLoad(){
-	score = 0
-	blocks = 0
-	grid = createMatrix(12,24)
-		// To generate new active and next shape
-	rollShape()
-
+// To check if a row is complete/not empty 
+// then delete it 
+function checkRows(){
+	
 }
 
 // To move the shape to right
@@ -208,6 +202,16 @@ function rotateShape(){
 	if(collides())
 		activeShape.shape = rotateMatrix(activeShape.shape,3)
 	pushShape()
+}
+
+// To reload the game
+function reload(){
+	score = 0
+	blocks = 0
+	grid = createMatrix(12,24)
+	// To generate new active and next shape
+	rollShape()
+
 }
 
 
